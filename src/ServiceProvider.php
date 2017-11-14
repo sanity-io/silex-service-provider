@@ -1,11 +1,12 @@
 <?php
-namespace Sanity;
+namespace Sanity\Silex;
 
+use Sanity\Client;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 use Silex\Application;
 
-class SanityServiceProvider implements ServiceProviderInterface
+class ServiceProvider implements ServiceProviderInterface
 {
     /**
      * Register the API client as a service in the container
@@ -20,7 +21,7 @@ class SanityServiceProvider implements ServiceProviderInterface
             'dataset' => null,
         ];
 
-        $app['sanity'] = function (Application $app) {
+        $app['sanity.client'] = function (Application $app) {
             return new Client($app['sanity.client.options']);
         };
     }

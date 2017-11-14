@@ -1,5 +1,5 @@
 {
-    "name": "sanity/sanity-silex-service-provider",
+    "name": "sanity/silex-service-provider",
     "description": "Sanity service provider for Silex",
     "type": "library",
     "scripts": {
@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sanity\\" : "src/"
+            "Sanity\\Silex\\" : "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sanity\\": "tests/"
+            "Sanity\\Silex\\": "tests/"
         }
     },
     "license": "MIT",

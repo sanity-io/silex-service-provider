@@ -1,13 +1,14 @@
 <?php
-namespace Sanity;
+namespace Sanity\Silex;
 
 use PHPUnit_Framework_TestCase;
+use Sanity\Client;
 use Silex\Application;
 
 /**
- * @coversDefaultClass Sanity\SanityServiceProvider
+ * @coversDefaultClass Sanity\Silex\ServiceProvider
  */
-class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
+class ServiceProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Application
@@ -30,7 +31,7 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->app = new Application();
-        $this->app->register(new SanityServiceProvider(), [
+        $this->app->register(new ServiceProvider(), [
             'sanity.client.options' => [
                 'projectId' => $this->projectId,
                 'dataset' => $this->dataset,
@@ -43,7 +44,7 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testServiceIsShared()
     {
-        $sanity1 = $this->app['sanity'];
+        $sanity1 = $this->app['sanity.client'];
 
         $this->assertInstanceOf(
             Client::class,
@@ -56,9 +57,7 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $sanity2 = $this->app['sanity'];
-
-        $this->assertSame($sanity1, $sanity2, 'Expected same instance of the API client');
+        $this->assertSame($sanity1, $this->app['sanity.client'], 'Expected same instance of the API client');
     }
 
     /**
@@ -69,6 +68,6 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset([
             'projectId' => $this->projectId,
             'dataset' => $this->dataset,
-        ], $this->app['sanity']->config(), 'Client configuration not properly set');
+        ], $this->app['sanity.client']->config(), 'Client configuration not properly set');
     }
 }
