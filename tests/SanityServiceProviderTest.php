@@ -2,7 +2,6 @@
 namespace Sanity;
 
 use PHPUnit_Framework_TestCase;
-use Pimple\Container;
 use Silex\Application;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Handler\MockHandler;
