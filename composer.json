@@ -1,0 +1,39 @@
+{
+    "name": "sanity/sanity-silex-service-provider",
+    "description": "Sanity service provider for Silex",
+    "type": "library",
+    "scripts": {
+        "test-phpunit": "./vendor/bin/phpunit",
+        "test-phpunit-coverage": "./vendor/bin/phpunit --coverage-html build/coverage",
+        "test-phpcs": "./vendor/bin/phpcs src",
+        "test": [
+            "@test-phpunit",
+            "@test-phpcs"
+        ]
+    },
+    "require": {
+        "sanity/sanity-php": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "^2.8",
+        "silex/silex": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sanity\\" : "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sanity\\": "tests/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sanity.io",
+            "email": "hello@sanity.io"
+        }
+    ]
+}
