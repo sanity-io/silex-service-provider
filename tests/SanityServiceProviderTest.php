@@ -3,10 +3,6 @@ namespace Sanity;
 
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 
 /**
  * @coversDefaultClass Sanity\SanityServiceProvider
@@ -14,19 +10,40 @@ use GuzzleHttp\Psr7\Response;
 class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Application
+     */
+    private $app;
+
+    /**
+     * @var string
+     */
+    private $projectId = 'zp7mbokg';
+
+    /**
+     * @var string
+     */
+    private $dataset = 'production';
+
+    /**
+     * Set up the application
+     */
+    public function setUp()
+    {
+        $this->app = new Application();
+        $this->app->register(new SanityServiceProvider(), [
+            'sanity.client.options' => [
+                'projectId' => $this->projectId,
+                'dataset' => $this->dataset,
+            ],
+        ]);
+    }
+
+    /**
      * @covers ::register
      */
     public function testServiceIsShared()
     {
-        $app = new Application();
-        $app->register(new SanityServiceProvider(), [
-            'sanity.client.options' => [
-                'projectId' => 'zp7mbokg',
-                'dataset' => 'production',
-            ],
-        ]);
-
-        $sanity1 = $app['sanity'];
+        $sanity1 = $this->app['sanity'];
 
         $this->assertInstanceOf(
             Client::class,
@@ -39,7 +56,7 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $sanity2 = $app['sanity'];
+        $sanity2 = $this->app['sanity'];
 
         $this->assertSame($sanity1, $sanity2, 'Expected same instance of the API client');
     }
@@ -49,40 +66,9 @@ class SanityServiceProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testClientMakesRequestsAgainstApi()
     {
-        $history = [];
-        $mockHandler = new MockHandler();
-        $handlerStack = HandlerStack::create($mockHandler);
-        $handlerStack->push(Middleware::history($history));
-
-        $app = new Application();
-        $app->register(new SanityServiceProvider(), [
-            'sanity.client.options' => [
-                'projectId' => $projectId = 'zp7mbokg',
-                'dataset' => $dataset = 'production',
-                'handler' => $handlerStack,
-            ],
-        ]);
-
-        // Add a mocked API response
-        $mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-            'documents' => [
-                [
-                    'some' => 'value',
-                ],
-            ],
-        ])));
-
-        // Generate a request
-        $response = $app['sanity']->getDocument('id');
-
-        $this->assertSame(
-            $expected = sprintf('https://%s.api.sanity.io/v1/data/doc/%s/id', $projectId, $dataset),
-            $actual = (string) $history[0]['request']->getUri(),
-            sprintf(
-                'Request URI did not include the correct segments. Expected "%s", got: "%s"',
-                $expected,
-                $actual
-            )
-        );
+        $this->assertArraySubset([
+            'projectId' => $this->projectId,
+            'dataset' => $this->dataset,
+        ], $this->app['sanity']->config(), 'Client configuration not properly set');
     }
 }
