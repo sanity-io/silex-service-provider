@@ -20,6 +20,7 @@ $app->register(new Sanity\Silex\ServiceProvider(), [
     'sanity.client.options' => [
         'projectId' => '<project id>', // required
         'dataset' => '<dataset>',      // required
+        'useCdn' => true,
     ],
 ]);
 ```
