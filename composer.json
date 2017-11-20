@@ -11,6 +11,11 @@
             "@test-phpcs"
         ]
     },
+    "config": {
+        "platform": {
+            "php": "5.6.0"
+        }
+    },
     "require": {
         "sanity/sanity-php": "^1.0"
     },
