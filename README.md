@@ -1,6 +1,8 @@
 # Sanity service provider for Silex
 A service provider for [Silex](https://silex.symfony.com/) that can be used to communicate with the [Sanity API](https://www.sanity.io/) using the [PHP library](https://github.com/sanity-io/sanity-php).
 
+[![Packagist](https://img.shields.io/packagist/v/sanity/silex-service-provider.svg?style=flat-square)](https://packagist.org/packages/sanity/silex-service-provider)[![Travis](https://img.shields.io/travis/sanity-io/silex-service-provider.svg?style=flat-square)](https://travis-ci.org/sanity-io/silex-service-provider)
+
 ## Requirements
 The service provider can be used with Silex >= 2.0.
 
